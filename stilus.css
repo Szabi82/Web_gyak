@@ -1,0 +1,85 @@
+/* Alapbeállítások */
+* { box-sizing: border-box; }
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: #121212; /* Mélyfekete háttér */
+    color: #e0e0e0; 
+    margin: 0; 
+    line-height: 1.6;
+}
+
+/* Konténer */
+.container { 
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
+
+/* Fejléc és Navigáció (Vízszintes menü) */
+header {
+    background-color: #1f1f1f;
+    padding: 1rem 0;
+    border-bottom: 2px solid #333;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Mobilon több sorba tördeli */
+    gap: 20px;
+}
+
+nav a {
+    color: #00adb5; /* Türkizkék hangsúlyszín - jól mutat a sötéten */
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #eee;
+}
+
+/* Kártya stílus a tartalomnak */
+.content-block {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* Táblázat stílus (CRUD-hoz) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+th { background-color: #252525; color: #00adb5; }
+
+/* Reszponzivitás: Mobilon a menü és táblázat igazítása */
+@media (max-width: 600px) {
+    nav { flex-direction: column; gap: 10px; }
+    .container { padding: 10px; }
+    table { font-size: 14px; }
+}
+
+/* Gombok */
+.btn {
+    background-color: #00adb5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
