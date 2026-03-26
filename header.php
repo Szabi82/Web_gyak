@@ -6,17 +6,28 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-End Streamer Project</title>
     <link rel="stylesheet" href="stilus.css">
-    <title>High-End Streamer Projekt</title>
 </head>
 <body>
-    <header>
-        <div class="user-info">
+
+<header>
+    <div class="container header-flex">
+        <div class="logo">
+            <span style="color: #00adb5;">High-End</span> Streamer
+        </div>
+        
+        <div class="user-status">
             <?php if(isset($_SESSION['user_id'])): ?>
-                Bejelentkezett: <?php echo $_SESSION['vezeteknev'] . " " . $_SESSION['utonev'] . " (" . $_SESSION['login'] . ")"; ?>
+                <span class="welcome-text">Bejelentkezett: 
+                    <strong><?php echo $_SESSION['last_name'] . " " . $_SESSION['first_name'] . " (" . $_SESSION['username'] . ")"; ?></strong>
+                </span>
             <?php endif; ?>
         </div>
-        <nav>
+    </div>
+
+    <nav>
+        <div class="container nav-flex">
             <a href="index.php">Főoldal</a>
             <a href="kepek.php">Képek</a>
             <a href="kapcsolat.php">Kapcsolat</a>
@@ -24,10 +35,12 @@ session_start();
             
             <?php if(isset($_SESSION['user_id'])): ?>
                 <a href="uzenetek.php">Üzenetek</a>
-                <a href="logout.php">Kilépés</a>
+                <a href="logout.php" class="logout-btn">Kilépés</a>
             <?php else: ?>
-                <a href="login.php">Bejelentkezés</a>
+                <a href="login.php" class="login-btn">Bejelentkezés</a>
             <?php endif; ?>
-        </nav>
-    </header>
-    <div class="container">
+        </div>
+    </nav>
+</header>
+
+<main class="container">
