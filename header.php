@@ -29,7 +29,7 @@ session_start();
     <nav>
         <div class="container nav-flex">
             <a href="index.php">Főoldal</a>
-            <a href="kepek.php">Képek</a>
+           <a href="picture.php">Képek</a>
             <a href="kapcsolat.php">Kapcsolat</a>
             <a href="crud.php">CRUD</a>
             
