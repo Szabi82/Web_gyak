@@ -1,14 +1,22 @@
 <?php
 session_start();
-// Adatbázis csatlakozás (PDO) - Írd be a saját adataidat!
+
+// InfinityFree Adatbázis csatlakozás
+$host = 'sql303.infinityfree.com';
+$dbname = 'if0_41428018_mozi_adatbazis'; 
+$user = 'if0_41428018';
+$pass = 'IITiAvhArV'; 
+
 try {
-    $dbh = new PDO('mysql:host=localhost;dbname=mozi_adatbazis', 'root', '', 
+    $dbh = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass, 
                   array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 } catch (PDOException $e) {
-    $error = "Database error: " . $e->getMessage();
+    $db_error = "Database connection failed.";
 }
 
-// Meghatározzuk, melyik oldalt kell betölteni
+// 1. EGYSÉGES LISTA: Itt definiáljuk az összes elérhető oldalt
+$allowed_pages = ['home', 'gallery', 'contact', 'contact_save', 'crud', 'messages', 'login', 'logout', 'registration'];
+
 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 ?>
 <!DOCTYPE html>
@@ -31,6 +39,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
             
             <?php if(!isset($_SESSION['login'])): ?>
                 <li><a href="index.php?page=login">Login</a></li>
+                <li><a href="index.php?page=registration">Register</a></li>
             <?php else: ?>
                 <li><a href="index.php?page=messages">Messages</a></li>
                 <li><a href="index.php?page=logout">Logout</a></li>
@@ -39,22 +48,23 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     </nav>
     
     <?php if(isset($_SESSION['login'])): ?>
-        <div style="text-align: right; padding: 10px; color: #aaa;">
-            Logged in as: <?= $_SESSION['csaladi_nev'] . " " . $_SESSION['utonev'] ?>
+        <div style="text-align: right; padding: 10px; color: #aaa; background: #222; font-size: 14px;">
+            Logged in as: <strong><?= htmlspecialchars($_SESSION['csaladi_nev'] . " " . $_SESSION['utonev']) ?></strong>
         </div>
     <?php endif; ?>
 </header>
 
 <main>
     <?php
-    // Itt történik a "legózás": betöltjük a kért oldalt
-    $allowed_pages = ['home', 'gallery', 'contact', 'contact_save', 'crud', 'messages', 'login', 'logout'];
-    
+    // 2. ELLENŐRZÉS: Itt is ugyanazt a listát használjuk, amit felül definiáltunk
     if (in_array($page, $allowed_pages)) {
         if (file_exists($page . ".php")) {
             include($page . ".php");
         } else {
-            echo "<div class='container'><h2>Page not found!</h2></div>";
+            echo "<div class='container' style='padding:50px; text-align:center;'>
+                    <h2>Page not found!</h2>
+                    <p>A fájl hiányzik: <b>$page.php</b></p>
+                  </div>";
         }
     } else {
         include("home.php");
@@ -62,8 +72,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     ?>
 </main>
 
-<footer>
-    <p style="text-align: center; padding: 20px;">&copy; 2026 Cinema Project - Web-prog 1</p>
+<footer style="margin-top: 50px; border-top: 1px solid #333;">
+    <p style="text-align: center; padding: 20px; color: #666;">&copy; 2026 Cinema Project - Web-prog 1</p>
 </footer>
 
 </body>
