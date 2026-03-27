@@ -1,46 +1,21 @@
-<?php
-session_start();
-?>
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>High-End Streamer Project</title>
-    <link rel="stylesheet" href="stilus.css">
-</head>
-<body>
-
-<header>
-    <div class="container header-flex">
-        <div class="logo">
-            <span style="color: #00adb5;">High-End</span> Streamer
-        </div>
+<nav>
+    <ul style="display: flex; list-style: none; gap: 20px; background: #333; padding: 10px;">
+        <li><a href="index.php?oldal=fooldal" style="color: white;">Főoldal</a></li>
+        <li><a href="index.php?oldal=kepek" style="color: white;">Képek</a></li>
+        <li><a href="index.php?oldal=kapcsolat" style="color: white;">Kapcsolat</a></li>
+        <li><a href="index.php?oldal=crud" style="color: white;">CRUD (Filmek)</a></li>
         
-        <div class="user-status">
-            <?php if(isset($_SESSION['user_id'])): ?>
-                <span class="welcome-text">Bejelentkezett: 
-                    <strong><?php echo $_SESSION['last_name'] . " " . $_SESSION['first_name'] . " (" . $_SESSION['username'] . ")"; ?></strong>
-                </span>
-            <?php endif; ?>
-        </div>
+        <?php if(!isset($_SESSION['login'])): ?>
+            <li><a href="index.php?oldal=bejelentkezes" style="color: white;">Bejelentkezés</a></li>
+        <?php else: ?>
+            <li><a href="index.php?oldal=uzenetek" style="color: white;">Üzenetek</a></li>
+            <li><a href="index.php?oldal=kilepes" style="color: white;">Kilépés</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
+
+<?php if(isset($_SESSION['login'])): ?>
+    <div style="text-align: right; padding: 5px;">
+        Bejelentkezett: <?= $_SESSION['csaladi_nev'] . " " . $_SESSION['utonev'] . " (" . $_SESSION['login'] . ")" ?>
     </div>
-
-    <nav>
-        <div class="container nav-flex">
-            <a href="index.php">Főoldal</a>
-           <a href="picture.php">Képek</a>
-            <a href="kapcsolat.php">Kapcsolat</a>
-            <a href="crud.php">CRUD</a>
-            
-            <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="uzenetek.php">Üzenetek</a>
-                <a href="logout.php" class="logout-btn">Kilépés</a>
-            <?php else: ?>
-                <a href="login.php" class="login-btn">Bejelentkezés</a>
-            <?php endif; ?>
-        </div>
-    </nav>
-</header>
-
-<main class="container">
+<?php endif; ?>
