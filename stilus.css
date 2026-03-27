@@ -83,3 +83,99 @@ th { background-color: #252525; color: #00adb5; }
     border-radius: 5px;
     cursor: pointer;
 }
+
+
+/* Üzenőfal specifikus stílusok */
+.message-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-left: 5px solid #00adb5; /* Türkiz csík a szélén */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.message-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 173, 181, 0.1);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+}
+
+.message-user {
+    color: #00adb5;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.message-date {
+    color: #666;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.message-text {
+    color: #ccc;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Űrlap csinosítása */
+.message-form-container {
+    background: #252525;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 1px solid #444;
+}
+
+.message-form-container textarea {
+    width: 100%;
+    background: #121212;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 12px;
+    font-family: inherit;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.message-form-container textarea:focus {
+    border-color: #00adb5;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 173, 181, 0.5);
+}
+/* Modal (felugró ablak) háttér */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  padding-top: 50px; 
+  left: 0; top: 0; width: 100%; height: 100%; 
+  background-color: rgba(0,0,0,0.9); 
+}
+
+/* A kép a modalban */
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 80%;
+  max-height: 80%;
+  border: 2px solid #00adb5;
+  box-shadow: 0 0 20px rgba(0, 173, 181, 0.5);
+}
+
+/* Bezáró gomb */
+.close {
+  position: absolute; top: 15px; right: 35px;
+  color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer;
+}

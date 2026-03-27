@@ -50,26 +50,31 @@ $result = $conn->query($query);
                 <button type="submit" name="send_msg" class="btn" style="margin-top: 10px;">Üzenet küldése</button>
             </form>
         </div>
+<div class="message-list">
+    <?php if ($result && $result->num_rows > 0): ?>
+        <?php while($row = $result->fetch_assoc()): ?>
+            <div class="message-card">
+                <div class="message-header">
+                    <span class="message-user">
+                        <?php echo htmlspecialchars($row['csaladi_nev'] . " " . $row['uto_nev']); ?>
+                    </span>
+                    <span class="message-date">
+                        <?php echo date('Y.m.d H:i', strtotime($row['letrehozva'])); ?>
+                    </span>
+                </div>
+                <div class="message-text">
+                    <?php echo nl2br(htmlspecialchars($row['uzenet_szovege'])); ?>
+                </div>
+            </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <p style="text-align: center; color: #888;">Még nincsenek üzenetek. Legyél te az első!</p>
+    <?php endif; ?>
+</div>
 
-        <div class="message-list">
-            <?php if ($result && $result->num_rows > 0): ?>
-                <?php while($row = $result->fetch_assoc()): ?>
-                    <div style="background: #1a1a1a; border-left: 4px solid #00adb5; padding: 15px; margin-bottom: 10px; border-radius: 4px;">
-                        <small style="color: #888;">
-                            <?php echo $row['letrehozva']; ?> - 
-                            <strong style="color: #00adb5;">
-                                <?php echo htmlspecialchars($row['csaladi_nev'] . " " . $row['uto_nev']); ?>
-                            </strong>
-                        </small>
-                        <p style="margin-top: 10px; color: #eee;">
-                            <?php echo nl2br(htmlspecialchars($row['uzenet_szovege'])); ?>
-                        </p>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <p>Még nincsenek üzenetek. Legyél te az első!</p>
-            <?php endif; ?>
-        </div>
+
+
+
     </div>
 </div>
 <?php $conn->close(); ?>

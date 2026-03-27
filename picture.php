@@ -33,6 +33,27 @@
         ?>
     </div>
 </div>
-
+<div id="myModal" class="modal" onclick="this.style.display='none'">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+</div>
 </body>
+<script>
+function openModal(src) {
+  document.getElementById("img01").src = src;
+  document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+}
+
+// Ha a képen kívülre kattintasz akkor is bezáródik
+window.onclick = function(event) {
+  var modal = document.getElementById("myModal");
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
 </html>

@@ -36,10 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image_to_upload'])) {
 
     // Execute upload
     if (move_uploaded_file($_FILES["image_to_upload"]["tmp_name"], $destination)) {
-        header("Location: pictures.php?status=success");
+        // Sikeres feltöltés után visszairányítunk a galériába
+        header("Location: picture.php?success=upload");
         exit();
     } else {
-        echo "Error: Upload failed on the server.";
+        die("Hiba történt a fájl mozgatása közben. Ellenőrizd az uploads mappa jogosultságait!");
     }
+}
+
+
+
+
+
+
 }
 ?>
