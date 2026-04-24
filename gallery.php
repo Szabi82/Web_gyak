@@ -44,18 +44,18 @@ if (isset($_POST['upload']) && isset($_SESSION['login'])) {
             </form>
         </div>
     <?php endif; ?>
-    
 
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
         <?php
         $files = glob($upload_dir . "*.{jpg,jpeg,png,gif}", GLOB_BRACE);
         if ($files):
-            foreach ($files as $file): ?>
-                <div style="background: #222; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333;">
-                    <img src="<?php echo $file; ?>" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
-                    <p style="font-size: 12px; color: #aaa; margin-top: 10px;"><?php echo basename($file); ?></p>
-                </div>
-            <?php endforeach;
+            foreach($files as $file) {
+    echo '<div style="background: #222; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333;">';
+    // Az útvonal elé teszünk egy ./ jelet, hogy az aktuális mappából induljon
+    echo '<img src="./' . htmlspecialchars($file) . '" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">';
+    echo '<p style="font-size: 12px; color: #aaa; margin-top: 10px;">' . basename($file) . '</p>';
+    echo '</div>';
+}
         else: ?>
             <p>No images yet.</p>
         <?php endif; ?>
