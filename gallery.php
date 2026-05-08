@@ -1,62 +1,88 @@
 <?php
 $upload_dir = "images/";
 $message = "";
+$msg_type = "info";
 
-// 1. Feltöltés kezelése
-if (isset($_POST['upload']) && isset($_SESSION['login'])) {
-    if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
-    }
-
-    $target_file = $upload_dir . basename($_FILES["fileToUpload"]["name"]);
-    $ext = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-    $allowed = array("jpg", "jpeg", "png", "gif");
-
-    if (in_array($ext, $allowed)) {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $message = "Sikeres feltöltés!";
-        } else {
-            $message = "Hiba: Nem sikerült a fájl mozgatása.";
-        }
+if (isset($_POST['upload'])) {
+    if (!isset($_SESSION['login'])) {
+        $message  = "Képet csak bejelentkezett felhasználó tölthet fel!";
+        $msg_type = "error";
     } else {
-        $message = "Hiba: Csak JPG, PNG és GIF fájlok engedélyezettek.";
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+
+        $allowed = ["jpg", "jpeg", "png", "gif"];
+        $ext     = strtolower(pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION));
+
+        if (!in_array($ext, $allowed)) {
+            $message  = "Hiba: Csak JPG, PNG és GIF fájlok engedélyezettek!";
+            $msg_type = "error";
+        } elseif ($_FILES["fileToUpload"]["size"] > 5 * 1024 * 1024) {
+            $message  = "Hiba: A fájl mérete nem lehet nagyobb 5MB-nál!";
+            $msg_type = "error";
+        } else {
+            // Biztonságos fájlnév
+            $safe_name   = time() . "_" . preg_replace('/[^a-zA-Z0-9._-]/', '_', basename($_FILES["fileToUpload"]["name"]));
+            $target_file = $upload_dir . $safe_name;
+
+            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                $message  = "✅ Sikeres feltöltés: " . htmlspecialchars($safe_name);
+                $msg_type = "success";
+            } else {
+                $message  = "Hiba: Nem sikerült a fájl feltöltése.";
+                $msg_type = "error";
+            }
+        }
     }
 }
 ?>
 
 <div class="container">
-    <h2>Gallery</h2>
-    
+    <h2>🖼️ Képgaléria</h2>
+
     <?php if ($message): ?>
-        <p style="color: yellow; background: #444; padding: 10px; border-radius: 5px;">
-            <?php echo $message; ?>
-        </p>
+        <div class="alert alert-<?= $msg_type ?>"><?= $message ?></div>
     <?php endif; ?>
 
+    <!-- Feltöltés – csak bejelentkezett felhasználónak -->
     <?php if (isset($_SESSION['login'])): ?>
-        <div style="background: #333; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-            <h3>Upload new image</h3>
+        <div style="background: #2a2a2a; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #333;">
+            <h3 style="margin-top: 0; color: #e50914;">📤 Új kép feltöltése</h3>
             <form action="index.php?page=gallery" method="post" enctype="multipart/form-data">
-                <input type="file" name="fileToUpload" required style="margin-bottom: 10px; display: block;">
-                <button type="submit" name="upload" style="background: #e50914; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                    Upload Image
-                </button>
+                <input type="file" name="fileToUpload" accept=".jpg,.jpeg,.png,.gif" required
+                    style="margin-bottom: 12px; display: block; color: #ddd;">
+                <p style="font-size: 12px; color: #777; margin: 0 0 10px;">
+                    Engedélyezett formátumok: JPG, PNG, GIF | Max. méret: 5MB
+                </p>
+                <button type="submit" name="upload">⬆️ Feltöltés</button>
             </form>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-info" style="margin-bottom: 20px;">
+            ℹ️ Képek feltöltéséhez <a href="index.php?page=login" style="color: #e50914;">jelentkezz be</a>!
         </div>
     <?php endif; ?>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+    <!-- Képek megjelenítése -->
+    <div class="gallery-grid">
         <?php
         $files = glob($upload_dir . "*.{jpg,jpeg,png,gif}", GLOB_BRACE);
-        if ($files):
+        if ($files && count($files) > 0):
+            // Legújabb elöl
+            usort($files, function($a, $b) { return filemtime($b) - filemtime($a); });
             foreach ($files as $file): ?>
-                <div style="background: #222; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #333;">
-                    <img src="<?php echo $file; ?>" style="width: 100%; height: 180px; object-fit: cover; border-radius: 5px;">
-                    <p style="font-size: 12px; color: #aaa; margin-top: 10px;"><?php echo basename($file); ?></p>
+                <div class="gallery-item">
+                    <img src="<?= htmlspecialchars($file) ?>"
+                         alt="<?= htmlspecialchars(basename($file)) ?>"
+                         loading="lazy">
+                    <p><?= htmlspecialchars(basename($file)) ?></p>
                 </div>
             <?php endforeach;
         else: ?>
-            <p>No images yet.</p>
+            <p style="color: #666; grid-column: 1/-1; text-align: center; padding: 40px 0;">
+                Még nincs feltöltött kép.
+            </p>
         <?php endif; ?>
     </div>
 </div>
